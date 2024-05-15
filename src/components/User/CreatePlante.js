@@ -17,12 +17,14 @@ const CreatePlante = () => {
         setPlante({ ...plante, [name]: value });
     }
 
+    const isLoggedIn = localStorage.getItem('token') == !null;
+    const isNotLoggedIn = localStorage.getItem('token') == null;
 
     const handelSubmit = async (event) => {
         event.preventDefault();
         try {
             setIsLoading(true);
-            const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndWxvdXBlIiwiaWF0IjoxNzE1ODA4MzczLCJleHAiOjE3MTU4MDk4MTN9.NV4hEfsDDQOG_x0akoFbiIDkt80No6G52Dt_P7l01g8";
+            const token = localStorage.getItem('token');
             const currentDate = new Date().toISOString();
 
             // Mettre à jour la date de soumission dans l'état
@@ -65,7 +67,9 @@ const CreatePlante = () => {
                 {error && <p>Error: {error}</p>}
                 <p>Créer une plante</p>
             </div>
-            <form onSubmit={handelSubmit}>
+            {isNotLoggedIn && <h5> Veuillez vous connecter pour créer une plante</h5>}
+            {isLoggedIn && <form onSubmit={handelSubmit}>
+
                 <div className="mb-3">
                     <label for="nom_plante" className="form-label">nom plante</label>
                     <input type="text" className="form-control" id="nom_plante" name="nom_plante" value={plante.nom_plante} onChange={handelInput} />
@@ -93,6 +97,7 @@ const CreatePlante = () => {
 
                 <button type="submit" className="btn btn-primary submit-btn">Submit</button>
             </form>
+            }
         </div>
     )
 }
