@@ -55,12 +55,11 @@ const Authentification = () => {
                     password: inscriptionData.password,
                     role: inscriptionData.role,
                 }),
-
             });
 
             if (response.ok) {
                 try {
-                    const response = await fetch('http://localhost:8080/auth/login', {
+                    const loginResponse = await fetch('http://localhost:8080/auth/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -70,13 +69,11 @@ const Authentification = () => {
                             password: inscriptionData.password,
                         }),
                     });
-                    if (response.ok) {
-                        const responseData = await response.json();
-                        const token = responseData.token;
-                        console.log(token)// Supposons que le token est renvoyé sous la clé "token"
-                        // Stockez le token dans localStorage ou dans un état de l'application pour une utilisation ultérieure
+                    if (loginResponse.ok) {
+                        const responseData = await loginResponse.json();
+                        const { token, id_utilisateur } = responseData;
                         localStorage.setItem('token', token);
-                        // Redirigez l'utilisateur vers la page "showPlante" ou effectuez d'autres actions
+                        localStorage.setItem('id_utilisateur', id_utilisateur); // Stocker l'ID de l'utilisateur
                         window.location.href = '/show-plante';
                     } else {
                         setError('Erreur lors de la connexion. Veuillez vérifier vos identifiants.');
@@ -85,7 +82,6 @@ const Authentification = () => {
                     console.error('Erreur lors de la connexion :', error);
                     setError('Erreur lors de la connexion. Veuillez réessayer plus tard.');
                 }
-                window.location.href = '/show-plante';
             } else {
                 setError('Erreur lors de l\'inscription.');
             }
@@ -94,8 +90,6 @@ const Authentification = () => {
             setError('Erreur lors de l\'inscription. Veuillez réessayer plus tard.');
         }
     };
-
-
 
     const handleConnexionSubmit = async (e) => {
         e.preventDefault();
@@ -112,11 +106,9 @@ const Authentification = () => {
             });
             if (response.ok) {
                 const responseData = await response.json();
-                const token = responseData.token;
-                console.log(token)// Supposons que le token est renvoyé sous la clé "token"
-                // Stockez le token dans localStorage ou dans un état de l'application pour une utilisation ultérieure
+                const { token, id_utilisateur } = responseData;
                 localStorage.setItem('token', token);
-                // Redirigez l'utilisateur vers la page "showPlante" ou effectuez d'autres actions
+                localStorage.setItem('id_utilisateur', id_utilisateur); // Stocker l'ID de l'utilisateur
                 window.location.href = '/show-plante';
             } else {
                 setError('Erreur lors de la connexion. Veuillez vérifier vos identifiants.');
@@ -126,6 +118,7 @@ const Authentification = () => {
             setError('Erreur lors de la connexion. Veuillez réessayer plus tard.');
         }
     };
+
 
 
     return (

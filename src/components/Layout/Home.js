@@ -1,5 +1,5 @@
 import React from 'react'
-import ShowPlante from '../User/ShowPlante'
+import ShowPlante from '../User/ShowMyPlante'
 const Home = () => {
   return (
     <div>

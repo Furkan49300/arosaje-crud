@@ -24,7 +24,7 @@ export default function Header() {
           <div className="collapse navbar-collapse" id="mynavbar">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link className="nav-link" to="show-plante">
                   Accueil
                 </Link>
               </li>
@@ -34,7 +34,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="show-plante">
+                <Link className="nav-link" to="show-my-plante">
                   Mon profil
                 </Link>
               </li>
