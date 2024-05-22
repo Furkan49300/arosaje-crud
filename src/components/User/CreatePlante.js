@@ -13,12 +13,22 @@ const CreatePlante = () => {
         url_photo2: "",
         url_photo3: "",
     });
-
+    const [dateDebut, setDateDebut] = useState("");
+    const [dateFin, setDateFin] = useState("");
     const [submissionDate, setSubmissionDate] = useState(""); // État pour stocker la date de soumission
 
     const handleInput = (event) => {
         const { name, value } = event.target;
         setPlante({ ...plante, [name]: value });
+    };
+
+    const handleDateInput = (event) => {
+        const { name, value } = event.target;
+        if (name === "dateDebut") {
+            setDateDebut(value);
+        } else if (name === "dateFin") {
+            setDateFin(value);
+        }
     };
 
     const handleFileInput = (event) => {
@@ -52,6 +62,29 @@ const CreatePlante = () => {
                 }
             };
 
+            const reservationData = {
+                dateDebut: dateDebut,
+                dateFin: dateFin,
+                etat: 0
+            };
+
+            const reservationResponse = await fetch("http://localhost:8080/reservations", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(reservationData),
+            });
+
+            if (!reservationResponse.ok) {
+                console.error('Échec de l\'enregistrement de la réservation');
+                return;
+            }
+
+            const reservationResult = await reservationResponse.json();
+            const id_reservation = reservationResult.id_reservation;
+
             console.log(planteData);
             const response = await fetch("http://localhost:8080/plantes", {
                 method: 'POST',
@@ -59,7 +92,7 @@ const CreatePlante = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(planteData),
+                body: JSON.stringify({ ...planteData, reservation: { id_reservation } }),
             });
 
             if (response.ok) {
@@ -108,6 +141,14 @@ const CreatePlante = () => {
                     <div className="mb-3">
                         <label htmlFor="url_photo3" className="form-label">Image 3</label>
                         <input type="file" className="form-control" id="url_photo3" name="url_photo3" onChange={handleFileInput} />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="dateDebut" className="form-label">Date de début</label>
+                        <input type="date" className="form-control" id="dateDebut" name="dateDebut" value={dateDebut} onChange={handleDateInput} />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="dateFin" className="form-label">Date de fin</label>
+                        <input type="date" className="form-control" id="dateFin" name="dateFin" value={dateFin} onChange={handleDateInput} />
                     </div>
                     <button type="submit" className="btn btn-primary submit-btn">Submit</button>
                 </form>

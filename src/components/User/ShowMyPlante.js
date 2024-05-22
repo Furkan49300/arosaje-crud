@@ -19,12 +19,18 @@ const ShowMyPlante = () => {
                 const url = `http://localhost:8080/plantes/utilisateur/${userId}`;
                 const response = await fetch(url, {
                     headers: {
+                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
                 });
 
                 if (!response.ok) {
-                    throw new Error('Veuillez vous connecter pour visualiser vos plantes');
+                    if (response.status === 404) {
+                        throw new Error('Vous n\'avez aucune plante');
+                    }
+                    else {
+                        throw new Error('Veuillez vous connecter pour visualiser vos plantes');
+                    }
                 }
                 const data = await response.json();
                 setPlantList(data);

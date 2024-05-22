@@ -1,9 +1,9 @@
 import React from 'react'
-import ShowPlante from '../User/ShowMyPlante'
+import Authentification from '../User/Authentification'
 const Home = () => {
   return (
     <div>
-      <ShowPlante />
+      <Authentification />
     </div>
   )
 }

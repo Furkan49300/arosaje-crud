@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import EditPlante from "./components/User/EditPlante";
 import Header from "./components/Common/Header";
 import Home from "./components/Layout/Home";
+import PlanteDetails from "./components/User/PlanteDetails";
 import Authentification from "./components/User/Authentification"
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/edit-plante/:id" element={<EditPlante />} />
             <Route path="/create-plante" element={<CreatePlante />} />
             <Route path="/show-plante" element={<ShowPlante />} />
+            <Route path="/plante/:id" element={<PlanteDetails />} />
             <Route path="/show-my-plante" element={<ShowMyPlante />} />
             <Route path="/authentification" element={<Authentification />} />
           </Routes>
