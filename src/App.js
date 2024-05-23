@@ -8,6 +8,8 @@ import Header from "./components/Common/Header";
 import Home from "./components/Layout/Home";
 import PlanteDetails from "./components/User/PlanteDetails";
 import Authentification from "./components/User/Authentification"
+import PlanteDetail from "./components/User/PlanteDetail"
+
 function App() {
   return (
     <div className="App">
@@ -20,7 +22,8 @@ function App() {
             <Route path="/edit-plante/:id" element={<EditPlante />} />
             <Route path="/create-plante" element={<CreatePlante />} />
             <Route path="/show-plante" element={<ShowPlante />} />
-            <Route path="/plante/:id" element={<PlanteDetails />} />
+            <Route path="/plante/:id_plante" element={<PlanteDetail />} />
+            <Route path="/plantes/:id" element={<PlanteDetails />} />
             <Route path="/show-my-plante" element={<ShowMyPlante />} />
             <Route path="/authentification" element={<Authentification />} />
           </Routes>

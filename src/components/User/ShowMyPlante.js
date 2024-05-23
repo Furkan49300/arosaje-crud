@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Loader from '../Common/Loader';
 import '../../App.css';
+import { Link } from 'react-router-dom';
 
 const ShowMyPlante = () => {
     const [error, setError] = useState(null);
@@ -137,7 +138,9 @@ const ShowMyPlante = () => {
                             <p className="plante-description">{plante.description}</p>
                             <p className="plante-variete"><strong>Variété:</strong> {plante.variete}</p>
                             <p className="plante-date"><strong>Mis en ligne le:</strong> {dateAffichee}</p>
-                            <button>Voir plus</button>
+                            <Link to={`/plante/${plante.id_plante}`}>
+                                <button>Voir plus</button>
+                            </Link>
                         </div>
                     );
                 })}

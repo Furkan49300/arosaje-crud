@@ -44,7 +44,7 @@ const ShowPlante = () => {
     }
 
     const handleVoirPlusClick = (plante) => {
-        navigate(`/plante/${plante.id_plante}`, { state: { plante } });
+        navigate(`/plantes/${plante.id_plante}`, { state: { plante } });
     };
 
 
