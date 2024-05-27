@@ -106,9 +106,10 @@ const Authentification = () => {
             });
             if (response.ok) {
                 const responseData = await response.json();
-                const { token, id_utilisateur } = responseData;
+                const { token, id_utilisateur, role } = responseData;
                 localStorage.setItem('token', token);
-                localStorage.setItem('id_utilisateur', id_utilisateur); // Stocker l'ID de l'utilisateur
+                localStorage.setItem('id_utilisateur', id_utilisateur);
+                localStorage.setItem('role', role);
                 window.location.href = '/show-plante';
             } else {
                 setError('Erreur lors de la connexion. Veuillez vérifier vos identifiants.');

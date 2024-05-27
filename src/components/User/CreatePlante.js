@@ -61,7 +61,8 @@ const CreatePlante = () => {
                     id_utilisateur: id_utilisateur
                 }
             };
-
+            const role = localStorage.getItem('role');
+            console.log(role)
             const reservationData = {
                 dateDebut: dateDebut,
                 dateFin: dateFin,

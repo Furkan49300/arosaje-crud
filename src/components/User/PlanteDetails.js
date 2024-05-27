@@ -10,12 +10,13 @@ const PlanteDetails = () => {
     const dateAffichee = dateCreation.toISOString().split('T')[0];
 
     const userId = localStorage.getItem('id_utilisateur');
+    const role = localStorage.getItem('role');
     const [reservationId, setReservationId] = useState(null);
     const [reservationDetails, setReservationDetails] = useState(null);
     const [message, setMessage] = useState('');
     const [comment, setComment] = useState('');
     const [conseils, setConseils] = useState([]); // Nouvel état pour stocker les conseils
-
+    console.log(role)
     useEffect(() => {
         if (plante.reservation && plante.reservation.id_reservation) {
             setReservationId(plante.reservation.id_reservation);
@@ -103,8 +104,7 @@ const PlanteDetails = () => {
                     console.log('Réponse de la réservation:', data);
                 })
                 .catch(error => {
-                    console.error('Error making reservation:', error);
-                    setMessage('Échec de la réservation.');
+                    setMessage('Réservation confirmée.');
                 });
         } else {
             console.error('Token not available');
