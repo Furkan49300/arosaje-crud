@@ -13,6 +13,8 @@ const PlanteDetails = () => {
     const [reservationId, setReservationId] = useState(null);
     const [reservationDetails, setReservationDetails] = useState(null);
     const [message, setMessage] = useState('');
+    const [comment, setComment] = useState('');
+    const [conseils, setConseils] = useState([]); // Nouvel état pour stocker les conseils
 
     useEffect(() => {
         if (plante.reservation && plante.reservation.id_reservation) {
@@ -23,9 +25,10 @@ const PlanteDetails = () => {
         }
     }, [plante]);
 
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
         if (reservationId) {
-            const token = localStorage.getItem('token');
             fetch(`http://localhost:8080/reservations/${reservationId}`, {
                 method: 'GET',
                 headers: {
@@ -49,37 +52,111 @@ const PlanteDetails = () => {
                     console.error('Error fetching reservation details:', error);
                 });
         }
-    }, [reservationId]);
+    }, [reservationId, token]);
+
+    useEffect(() => {
+        if (token) {
+            fetch(`http://localhost:8080/api/conseils/plante/${plante.id_plante}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch conseils');
+                    }
+                    return response.json();
+                })
+                .then(data => setConseils(data))
+                .catch(error => console.error('Error fetching conseils:', error));
+        } else {
+            console.error('Token not available');
+        }
+    }, [plante.id_plante, token]);
 
     const handleReservation = () => {
         console.log('User ID:', userId);
         console.log('Reservation ID:', reservationId);
 
-        const token = localStorage.getItem('token');
-        fetch(`http://localhost:8080/reservations/${reservationId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
+        if (token) {
+            fetch(`http://localhost:8080/reservations/${reservationId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    id_utilisateur: parseInt(userId),
+                    etat: true
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to make reservation');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setMessage('Réservation réussie!');
+                    console.log('Réponse de la réservation:', data);
+                })
+                .catch(error => {
+                    console.error('Error making reservation:', error);
+                    setMessage('Échec de la réservation.');
+                });
+        } else {
+            console.error('Token not available');
+        }
+    };
+
+    const handleCommentChange = (event) => {
+        setComment(event.target.value);
+    };
+
+    const handleCommentSubmit = () => {
+        const id_plante = plante.id_plante;
+
+        if (token) {
+            const conseilData = {
                 id_utilisateur: parseInt(userId),
-                etat: true
-            }),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to make reservation');
-                }
+                id_plante: parseInt(id_plante),
+                contenu: comment
+            };
+
+            console.log(conseilData)
+
+            fetch('http://localhost:8080/api/conseils/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(conseilData),
             })
-            .then(data => {
-                setMessage('Réservation réussie!');
-                console.log('Réponse de la réservation:', data);
-            })
-            .catch(error => {
-                console.error('Error making reservation:', error);
-                setMessage('Échec de la réservation.');
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to post comment');
+                    }
+                    // Re-fetch conseils après un commentaire réussi
+                    return fetch(`http://localhost:8080/api/conseils/plante/${plante.id_plante}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    })
+                })
+                .then(response => response.json())
+                .then(data => setConseils(data))
+                .catch(error => {
+                    console.error('Error posting comment:', error);
+                    // Ajoutez ici le code pour gérer une erreur si nécessaire
+                });
+        } else {
+            console.error('Token not available');
+        }
     };
 
     return (
@@ -101,6 +178,27 @@ const PlanteDetails = () => {
                     <button onClick={handleReservation}>Réserver</button>
                 )}
                 {message && <p>{message}</p>}
+            </div>
+
+            <div className="comment-section">
+                <h4>Poste un conseil pour la communauté</h4>
+                <textarea
+                    className="comment-input"
+                    placeholder="Ajouter un commentaire..."
+                    value={comment}
+                    onChange={handleCommentChange}
+                />
+                <button className="comment-button" onClick={handleCommentSubmit}>
+                    Commenter
+                </button>
+                <div className="conseils-list">
+                    <h4>Conseils</h4>
+                    {conseils.map(conseil => (
+                        <div key={conseil.id_conseil} className="conseil-item">
+                            <p>{conseil.contenu}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

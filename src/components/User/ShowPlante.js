@@ -55,6 +55,7 @@ const ShowPlante = () => {
         return planteUserId !== currentUserId;
     });
 
+
     return (
         <div>
             <h1>Fil d'actualité</h1>

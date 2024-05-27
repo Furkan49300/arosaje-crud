@@ -66,7 +66,7 @@ const ShowMyPlante = () => {
                     if (reservationsResponse.status === 404) {
                         setNoPlantsMessage("Vous n'avez aucune réservation.");
                     } else {
-                        throw new Error('Failed to fetch reservations');
+                        throw new Error('Connectez vous pour voir vos plantes');
                     }
                 } else {
                     const reservationsText = await reservationsResponse.text();
