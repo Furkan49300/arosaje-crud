@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../../App.css';
+import Chat from './Chat'; // Assurez-vous que le chemin est correct
 
 const PlanteDetails = () => {
     const location = useLocation();
@@ -10,13 +11,12 @@ const PlanteDetails = () => {
     const dateAffichee = dateCreation.toISOString().split('T')[0];
 
     const userId = localStorage.getItem('id_utilisateur');
-    const role = localStorage.getItem('role');
     const [reservationId, setReservationId] = useState(null);
     const [reservationDetails, setReservationDetails] = useState(null);
     const [message, setMessage] = useState('');
     const [comment, setComment] = useState('');
     const [conseils, setConseils] = useState([]); // Nouvel état pour stocker les conseils
-    console.log(role)
+
     useEffect(() => {
         if (plante.reservation && plante.reservation.id_reservation) {
             setReservationId(plante.reservation.id_reservation);
@@ -200,6 +200,8 @@ const PlanteDetails = () => {
                     ))}
                 </div>
             </div>
+
+
         </div>
     );
 };

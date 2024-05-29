@@ -71,8 +71,9 @@ const Authentification = () => {
                     });
                     if (loginResponse.ok) {
                         const responseData = await loginResponse.json();
-                        const { token, id_utilisateur } = responseData;
+                        const { token, id_utilisateur, role } = responseData;
                         localStorage.setItem('token', token);
+                        localStorage.setItem('role', role);
                         localStorage.setItem('id_utilisateur', id_utilisateur); // Stocker l'ID de l'utilisateur
                         window.location.href = '/show-plante';
                     } else {
