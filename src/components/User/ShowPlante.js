@@ -14,7 +14,7 @@ const ShowPlante = () => {
         const fetchPlants = async () => {
             try {
 
-                const response = await fetch("http://localhost:8080/plantes", {
+                const response = await fetch("https://arosaje-back.onrender.com/plantes", {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

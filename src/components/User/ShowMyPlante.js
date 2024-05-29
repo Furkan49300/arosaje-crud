@@ -16,7 +16,7 @@ const ShowMyPlante = () => {
                 const userId = localStorage.getItem('id_utilisateur');
 
                 const token = localStorage.getItem('token');
-                const url = `http://localhost:8080/plantes/utilisateur/${userId}`;
+                const url = `https://arosaje-back.onrender.com/plantes/utilisateur/${userId}`;
                 const response = await fetch(url, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const ShowMyPlante = () => {
                 const token = localStorage.getItem('token');
 
                 // Fetch reservations by user ID
-                const reservationsUrl = `http://localhost:8080/reservations/user/${userId}`;
+                const reservationsUrl = `https://arosaje-back.onrender.com/reservations/user/${userId}`;
                 const reservationsResponse = await fetch(reservationsUrl, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const ShowMyPlante = () => {
                     const reservations = reservationsText ? JSON.parse(reservationsText) : [];
 
                     const plantsPromises = reservations.map(async (reservation) => {
-                        const plantsUrl = `http://localhost:8080/plantes/reservation/${reservation.id_reservation}`;
+                        const plantsUrl = `https://arosaje-back.onrender.com/plantes/reservation/${reservation.id_reservation}`;
                         const plantsResponse = await fetch(plantsUrl, {
                             headers: {
                                 'Content-Type': 'application/json',

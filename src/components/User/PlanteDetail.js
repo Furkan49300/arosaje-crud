@@ -24,7 +24,7 @@ const PlantDetail = () => {
         const fetchPlantDetail = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`http://localhost:8080/plantes/${id_plante}`, {
+                const response = await fetch(`https://arosaje-back.onrender.com/plantes/${id_plante}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
@@ -52,7 +52,7 @@ const PlantDetail = () => {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/plantes/${id_plante}`, {
+            const response = await fetch(`https://arosaje-back.onrender.com/plantes/${id_plante}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const PlantDetail = () => {
         event.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/plantes/${id_plante}`, {
+            const response = await fetch(`https://arosaje-back.onrender.com/plantes/${id_plante}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

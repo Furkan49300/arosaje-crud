@@ -69,7 +69,7 @@ const CreatePlante = () => {
                 etat: 0
             };
 
-            const reservationResponse = await fetch("http://localhost:8080/reservations", {
+            const reservationResponse = await fetch("https://arosaje-back.onrender.com/reservations", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const CreatePlante = () => {
             const id_reservation = reservationResult.id_reservation;
 
             console.log(planteData);
-            const response = await fetch("http://localhost:8080/plantes", {
+            const response = await fetch("https://arosaje-back.onrender.com/plantes", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -9,7 +9,7 @@ const EditPlante = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const getUserApi = "http://localhost:3000/user";
+  const getUserApi = "https://arosaje-back.onrender.com/user";
 
   useEffect(() => {
     getUser();

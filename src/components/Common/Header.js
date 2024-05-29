@@ -22,7 +22,7 @@ const Header = () => {
         }
 
         const token = localStorage.getItem('token');
-        const url = `http://localhost:8080/utilisateurs/${userId}`;
+        const url = `https://arosaje-back.onrender.com/utilisateurs/${userId}`;
         const response = await fetch(url, {
           headers: {
             'Content-Type': 'application/json',

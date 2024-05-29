@@ -30,7 +30,7 @@ const PlanteDetails = () => {
 
     useEffect(() => {
         if (reservationId) {
-            fetch(`http://localhost:8080/reservations/${reservationId}`, {
+            fetch(`https://arosaje-back.onrender.com/reservations/${reservationId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ const PlanteDetails = () => {
 
     useEffect(() => {
         if (token) {
-            fetch(`http://localhost:8080/api/conseils/plante/${plante.id_plante}`, {
+            fetch(`https://arosaje-back.onrender.com/api/conseils/plante/${plante.id_plante}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const PlanteDetails = () => {
         console.log('Reservation ID:', reservationId);
 
         if (token) {
-            fetch(`http://localhost:8080/reservations/${reservationId}`, {
+            fetch(`https://arosaje-back.onrender.com/reservations/${reservationId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ const PlanteDetails = () => {
 
             console.log(conseilData)
 
-            fetch('http://localhost:8080/api/conseils/add', {
+            fetch('https://arosaje-back.onrender.com/api/conseils/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ const PlanteDetails = () => {
                         throw new Error('Failed to post comment');
                     }
                     // Re-fetch conseils après un commentaire réussi
-                    return fetch(`http://localhost:8080/api/conseils/plante/${plante.id_plante}`, {
+                    return fetch(`https://arosaje-back.onrender.com/api/conseils/plante/${plante.id_plante}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
