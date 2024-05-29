@@ -14,9 +14,6 @@ const ShowMyPlante = () => {
         const fetchUserPlants = async () => {
             try {
                 const userId = localStorage.getItem('id_utilisateur');
-                if (!userId) {
-                    throw new Error('User ID not found in localStorage');
-                }
 
                 const token = localStorage.getItem('token');
                 const url = `http://localhost:8080/plantes/utilisateur/${userId}`;
@@ -47,9 +44,6 @@ const ShowMyPlante = () => {
         const fetchReservationPlants = async () => {
             try {
                 const userId = localStorage.getItem('id_utilisateur');
-                if (!userId) {
-                    throw new Error('User ID not found in localStorage');
-                }
 
                 const token = localStorage.getItem('token');
 
