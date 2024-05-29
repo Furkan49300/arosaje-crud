@@ -43,7 +43,7 @@ const Authentification = () => {
     const handleInscriptionSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/auth/register', {
+            const response = await fetch('https://arosaje-back.vercel.app/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const Authentification = () => {
 
             if (response.ok) {
                 try {
-                    const loginResponse = await fetch('http://localhost:8080/auth/login', {
+                    const loginResponse = await fetch('https://arosaje-back.vercel.app/auth/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const Authentification = () => {
     const handleConnexionSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/auth/login', {
+            const response = await fetch('https://arosaje-back.vercel.app/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
