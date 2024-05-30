@@ -131,6 +131,8 @@ const PlantDetail = () => {
     return (
         <div className="plante-detail">
             <img src={plant.url_photo1 || 'default_plant_image.png'} alt={plant.nom_plante} className="plante-photo" />
+            <img src={plant.url_photo2 || 'default_plant_image.png'} alt={plant.nom_plante} className="plante-photo" />
+            <img src={plant.url_photo3 || 'default_plant_image.png'} alt={plant.nom_plante} className="plante-photo" />
             <h3 className="plante-nom">{plant.nom_plante}</h3>
             <p className="plante-description">{plant.description}</p>
             <p className="plante-variete"><strong>Variété:</strong> {plant.variete}</p>

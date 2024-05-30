@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom'; // Importez useNavigate
 import '../../App.css';
 import Chat from './Chat'; // Assurez-vous que le chemin est correct
 
 const PlanteDetails = () => {
     const location = useLocation();
+    const Navigate = useNavigate(); // Utilisez useNavigate pour naviguer
     const { plante } = location.state;
 
     const dateCreation = new Date(plante.creele);
@@ -15,8 +16,8 @@ const PlanteDetails = () => {
     const [reservationDetails, setReservationDetails] = useState(null);
     const [message, setMessage] = useState('');
     const [comment, setComment] = useState('');
-    const [conseils, setConseils] = useState([]); // Nouvel état pour stocker les conseils
-    const [loading, setLoading] = useState(true); // Nouvel état de chargement
+    const [conseils, setConseils] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const token = localStorage.getItem('token');
 
@@ -46,7 +47,6 @@ const PlanteDetails = () => {
                         const data = await response.json();
                         setReservationDetails(data);
 
-                        // Vérifier si la réservation est déjà faite
                         if (data.etat == 1) {
                             setMessage('Déjà réservé');
                         }
@@ -71,10 +71,10 @@ const PlanteDetails = () => {
                 };
 
                 await Promise.all([fetchReservationDetails(), fetchConseils()]);
-                setLoading(false); // Arrêter le chargement une fois toutes les données chargées
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setLoading(false); // Arrêter le chargement même en cas d'erreur
+                setLoading(false);
             }
         };
 
@@ -156,7 +156,6 @@ const PlanteDetails = () => {
                 setConseils(conseilsData);
             } catch (error) {
                 console.error('Error posting comment:', error);
-                // Ajoutez ici le code pour gérer une erreur si nécessaire
             }
         } else {
             console.error('Token not available');
@@ -164,14 +163,18 @@ const PlanteDetails = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>; // Vous pouvez remplacer cela par un spinner ou tout autre indicateur de chargement
+        return <div>Loading...</div>;
     }
 
     return (
         <div>
             <h1>Détails de la Plante</h1>
-            <div className="plante-conteneur">
+            <div className='plante-vertical'>
                 <img src={plante.url_photo1 || 'default_plant_image.png'} alt={plante.nom_plante} className="plante-photo" />
+                <img src={plante.url_photo2 || 'default_plant_image.png'} alt={plante.nom_plante} className="plante-photo" />
+                <img src={plante.url_photo3 || 'default_plant_image.png'} alt={plante.nom_plante} className="plante-photo" />
+            </div>
+            <div className="plante-conteneur">
                 <h3 className="plante-nom">{plante.nom_plante}</h3>
                 <p className="plante-description">{plante.description}</p>
                 <p className="plante-variete"><strong>Variété:</strong> {plante.variete}</p>
@@ -208,6 +211,7 @@ const PlanteDetails = () => {
                     ))}
                 </div>
             </div>
+            <button onClick={() => Navigate(`/chat/${userId}/${plante.id_utilisateur}`)}>Contacter</button>
         </div>
     );
 };

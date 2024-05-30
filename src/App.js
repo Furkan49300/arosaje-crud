@@ -9,6 +9,8 @@ import Home from "./components/Layout/Home";
 import PlanteDetails from "./components/User/PlanteDetails";
 import Authentification from "./components/User/Authentification"
 import PlanteDetail from "./components/User/PlanteDetail"
+import ChatPage from "./components/User/ChatPage";
+import ConversationsList from "./components/User/ConversationList";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
             <Route path="/plantes/:id" element={<PlanteDetails />} />
             <Route path="/show-my-plante" element={<ShowMyPlante />} />
             <Route path="/authentification" element={<Authentification />} />
+            <Route path="/chat/:userId/:recipientId" element={<ChatPage />} />
+            <Route path="/conversations" element={<ConversationsList />} />
           </Routes>
 
         </div>

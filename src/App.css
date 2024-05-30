@@ -29,12 +29,11 @@
 
 .plante-description,
 .plante-variete {
-    text-align: center;
     font-size: 14px;
 }
 
 .plante-photo {
-    width: 100%;
+    width: 20%;
     max-height: 200px;
     object-fit: cover;
 }
