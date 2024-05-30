@@ -123,37 +123,46 @@ const Authentification = () => {
 
 
 
-    return (
+    return (<div className="auth-container">
+        <form className="inscription-form" onSubmit={handleInscriptionSubmit}>
+            <h2>Inscription</h2>
+            <input type="text" name="nom" placeholder="Nom" value={inscriptionData.nom} onChange={handleInscriptionChange} />
+            <input type="text" name="prenom" placeholder="Prénom" value={inscriptionData.prenom} onChange={handleInscriptionChange} />
+            <input type="email" name="mail" placeholder="E-mail" value={inscriptionData.mail} onChange={handleInscriptionChange} />
+            <input type="password" name="password" placeholder="Mot de passe" value={inscriptionData.password} onChange={handleInscriptionChange} />
+
+            <label className="checkbox-label">
+                Utilisateur
+                <input className="checkbox-input" type="checkbox" name="role" value="USER" checked={inscriptionData.role === 'USER'} onChange={handleInscriptionChange} />
+            </label>
+
+            <label className="checkbox-label">
+                Botaniste
+                <input className="checkbox-input" type="checkbox" name="role" value="BOTANISTE" checked={inscriptionData.role === 'BOTANISTE'} onChange={handleInscriptionChange} />
+            </label>
+
+            <label className="checkbox-label">
+                J'accepte les cgu
+                <input type="checkbox" className="checkbox-input" name="cgu" />
+            </label>
+
+            <button className="mdr" type="submit">S'inscrire</button>
+        </form>
+
+        <form className="connexion-form" onSubmit={handleConnexionSubmit}>
+            <h2>Connexion</h2>
+            <input type="email" name="mail" placeholder="E-mail" value={connexionData.mail} onChange={handleConnexionChange} />
+            <input type="password" name="password" placeholder="Mot de passe" value={connexionData.password} onChange={handleConnexionChange} />
+            <button className="mdr" type="submit">Se connecter</button>
+            {error && <p className="error-message">{error}</p>}
+        </form>
+
         <div className="auth-container">
-            <form className="inscription-form" onSubmit={handleInscriptionSubmit}>
-                <h2>Inscription</h2>
-                <input type="text" name="nom" placeholder="Nom" value={inscriptionData.nom} onChange={handleInscriptionChange} />
-                <input type="text" name="prenom" placeholder="Prénom" value={inscriptionData.prenom} onChange={handleInscriptionChange} />
-                <input type="email" name="mail" placeholder="E-mail" value={inscriptionData.mail} onChange={handleInscriptionChange} />
-                <input type="password" name="password" placeholder="Mot de passe" value={inscriptionData.password} onChange={handleInscriptionChange} />
-                <label>
-                    Utilisateur
-
-                    <input className="checkbox-input" type="checkbox" name="role" value="USER" checked={inscriptionData.role === 'USER'} onChange={handleInscriptionChange} />
-                </label>
-                <label>
-                    Botaniste
-                    <input className="checkbox-input" type="checkbox" name="role" value="BOTANISTE" checked={inscriptionData.role === 'BOTANISTE'} onChange={handleInscriptionChange} />
-
-                </label>
-                <button className="mdr" type="submit">S'inscrire</button>
-            </form>
-            <form className="connexion-form" onSubmit={handleConnexionSubmit}>
-                <h2>Connexion</h2>
-                <input type="email" name="mail" placeholder="E-mail" value={connexionData.mail} onChange={handleConnexionChange} />
-                <input type="password" name="password" placeholder="Mot de passe" value={connexionData.password} onChange={handleConnexionChange} />
-                <button className="mdr" type="submit">Se connecter</button>
-                {error && <p className="error-message">{error}</p>}
-            </form>
-            <div className="auth-container">
-                {message && <div className="message"><h3>{message}</h3></div>}
-            </div>
+            {message && <div className="message"><h3>{message}</h3></div>}
         </div>
+    </div>
+
+
 
     );
 };
