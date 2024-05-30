@@ -16,96 +16,99 @@ const PlanteDetails = () => {
     const [message, setMessage] = useState('');
     const [comment, setComment] = useState('');
     const [conseils, setConseils] = useState([]); // Nouvel état pour stocker les conseils
-
-    useEffect(() => {
-        if (plante.reservation && plante.reservation.id_reservation) {
-            setReservationId(plante.reservation.id_reservation);
-            console.log('ID de réservation:', plante.reservation.id_reservation);
-        } else {
-            console.log('ID de réservation non trouvé');
-        }
-    }, [plante]);
+    const [loading, setLoading] = useState(true); // Nouvel état de chargement
 
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        if (reservationId) {
-            fetch(`https://arosaje-back.onrender.com/reservations/${reservationId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
+        const fetchData = async () => {
+            try {
+                if (plante.reservation && plante.reservation.id_reservation) {
+                    setReservationId(plante.reservation.id_reservation);
+                    console.log('ID de réservation:', plante.reservation.id_reservation);
+                } else {
+                    console.log('ID de réservation non trouvé');
                 }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch reservation details');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setReservationDetails(data);
-                    // Vérifier si la réservation est déjà faite
-                    if (data.etat == 1) {
-                        setMessage('Déjà réservé');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching reservation details:', error);
-                });
-        }
-    }, [reservationId, token]);
 
-    useEffect(() => {
-        if (token) {
-            fetch(`https://arosaje-back.onrender.com/api/conseils/plante/${plante.id_plante}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-                .then(response => {
+                const fetchReservationDetails = async () => {
+                    if (reservationId) {
+                        const response = await fetch(`https://arosaje-back.onrender.com/reservations/${reservationId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch reservation details');
+                        }
+
+                        const data = await response.json();
+                        setReservationDetails(data);
+
+                        // Vérifier si la réservation est déjà faite
+                        if (data.etat === 1) {
+                            setMessage('Déjà réservé');
+                        }
+                    }
+                };
+
+                const fetchConseils = async () => {
+                    const response = await fetch(`https://arosaje-back.onrender.com/api/conseils/plante/${plante.id_plante}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
                     if (!response.ok) {
                         throw new Error('Failed to fetch conseils');
                     }
-                    return response.json();
-                })
-                .then(data => setConseils(data))
-                .catch(error => console.error('Error fetching conseils:', error));
-        } else {
-            console.error('Token not available');
-        }
-    }, [plante.id_plante, token]);
 
-    const handleReservation = () => {
+                    const data = await response.json();
+                    setConseils(data);
+                };
+
+                await Promise.all([fetchReservationDetails(), fetchConseils()]);
+                setLoading(false); // Arrêter le chargement une fois toutes les données chargées
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false); // Arrêter le chargement même en cas d'erreur
+            }
+        };
+
+        fetchData();
+    }, [reservationId, plante.id_plante, token]);
+
+    const handleReservation = async () => {
         console.log('User ID:', userId);
         console.log('Reservation ID:', reservationId);
 
         if (token) {
-            fetch(`https://arosaje-back.onrender.com/reservations/${reservationId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    id_utilisateur: parseInt(userId),
-                    etat: true
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to make reservation');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setMessage('Réservation réussie!');
-                    console.log('Réponse de la réservation:', data);
-                })
-                .catch(error => {
-                    setMessage('Réservation confirmée.');
+            try {
+                const response = await fetch(`https://arosaje-back.onrender.com/reservations/${reservationId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        id_utilisateur: parseInt(userId),
+                        etat: true
+                    }),
                 });
+
+                if (!response.ok) {
+                    throw new Error('Failed to make reservation');
+                }
+
+                const data = await response.json();
+                setMessage('Réservation réussie!');
+                console.log('Réponse de la réservation:', data);
+            } catch (error) {
+                setMessage('Réservation confirmée.');
+            }
         } else {
             console.error('Token not available');
         }
@@ -115,7 +118,7 @@ const PlanteDetails = () => {
         setComment(event.target.value);
     };
 
-    const handleCommentSubmit = () => {
+    const handleCommentSubmit = async () => {
         const id_plante = plante.id_plante;
 
         if (token) {
@@ -125,39 +128,44 @@ const PlanteDetails = () => {
                 contenu: comment
             };
 
-            console.log(conseilData)
+            console.log(conseilData);
 
-            fetch('https://arosaje-back.onrender.com/api/conseils/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(conseilData),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to post comment');
-                    }
-                    // Re-fetch conseils après un commentaire réussi
-                    return fetch(`https://arosaje-back.onrender.com/api/conseils/plante/${plante.id_plante}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        }
-                    })
-                })
-                .then(response => response.json())
-                .then(data => setConseils(data))
-                .catch(error => {
-                    console.error('Error posting comment:', error);
-                    // Ajoutez ici le code pour gérer une erreur si nécessaire
+            try {
+                const response = await fetch('https://arosaje-back.onrender.com/api/conseils/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(conseilData),
                 });
+
+                if (!response.ok) {
+                    throw new Error('Failed to post comment');
+                }
+
+                const conseilsResponse = await fetch(`https://arosaje-back.onrender.com/api/conseils/plante/${plante.id_plante}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const conseilsData = await conseilsResponse.json();
+                setConseils(conseilsData);
+            } catch (error) {
+                console.error('Error posting comment:', error);
+                // Ajoutez ici le code pour gérer une erreur si nécessaire
+            }
         } else {
             console.error('Token not available');
         }
     };
+
+    if (loading) {
+        return <div>Loading...</div>; // Vous pouvez remplacer cela par un spinner ou tout autre indicateur de chargement
+    }
 
     return (
         <div>
@@ -174,7 +182,7 @@ const PlanteDetails = () => {
                         <p className="reservation-date"><strong>Date de fin:</strong> {new Date(reservationDetails.dateFin).toISOString().split('T')[0]}</p>
                     </>
                 )}
-                {reservationDetails && reservationDetails.etat == 0 && (
+                {reservationDetails && reservationDetails.etat === 0 && (
                     <button onClick={handleReservation}>Réserver</button>
                 )}
                 {message && <p>{message}</p>}
@@ -200,8 +208,6 @@ const PlanteDetails = () => {
                     ))}
                 </div>
             </div>
-
-
         </div>
     );
 };
