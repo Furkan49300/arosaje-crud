@@ -47,7 +47,7 @@ const PlanteDetails = () => {
                         setReservationDetails(data);
 
                         // Vérifier si la réservation est déjà faite
-                        if (data.etat === 1) {
+                        if (data.etat == 1) {
                             setMessage('Déjà réservé');
                         }
                     }
