@@ -182,7 +182,7 @@ const PlanteDetails = () => {
                         <p className="reservation-date"><strong>Date de fin:</strong> {new Date(reservationDetails.dateFin).toISOString().split('T')[0]}</p>
                     </>
                 )}
-                {reservationDetails && reservationDetails.etat === 0 && (
+                {reservationDetails && reservationDetails.etat == 0 && (
                     <button onClick={handleReservation}>Réserver</button>
                 )}
                 {message && <p>{message}</p>}
