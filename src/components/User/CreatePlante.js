@@ -91,7 +91,6 @@ const CreatePlante = () => {
                 }
             };
             const role = localStorage.getItem('role');
-            console.log(role)
             const reservationData = {
                 dateDebut: dateDebut,
                 dateFin: dateFin,
@@ -115,7 +114,6 @@ const CreatePlante = () => {
             const reservationResult = await reservationResponse.json();
             const id_reservation = reservationResult.id_reservation;
 
-            console.log(planteData);
             const response = await fetch("https://arosaje-back.onrender.com/plantes", {
                 method: 'POST',
                 headers: {
