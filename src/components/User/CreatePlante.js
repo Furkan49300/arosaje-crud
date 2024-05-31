@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Loader from '../Common/Loader';
 import './User.css';
+import s3 from '../../aws-config';
 
 const CreatePlante = () => {
     const [error, setError] = useState(null);
@@ -31,13 +32,41 @@ const CreatePlante = () => {
         }
     };
 
-    const handleFileInput = (event) => {
+    const handleFileInput = async (event) => {
         const { name, files } = event.target;
         if (files.length > 0) {
             const file = files[0];
-            const url = URL.createObjectURL(file);
-            setPlante({ ...plante, [name]: url });
+            try {
+                setIsLoading(true);
+                const url = await uploadFile(file);
+                setPlante({ ...plante, [name]: url });
+            } catch (error) {
+                setError('Erreur lors du téléchargement de l\'image');
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
         }
+    };
+
+    const uploadFile = (file) => {
+        const fileName = encodeURIComponent(file.name);
+        const params = {
+            Bucket: 'arosaje', // Remplacez par le nom de votre bucket
+            Key: fileName,
+            Body: file,
+            ContentType: file.type
+        };
+
+        return new Promise((resolve, reject) => {
+            s3.upload(params, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data.Location);
+                }
+            });
+        });
     };
 
     const isLoggedIn = localStorage.getItem('token') !== null;
